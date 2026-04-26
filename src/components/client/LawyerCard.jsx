@@ -1,0 +1,86 @@
+import { useState } from 'react'
+import { MapPin, Phone, Banknote, Briefcase, ArrowRight, Star } from 'lucide-react'
+
+const SPECIALTY_COLORS = {
+  'Criminal Law': 'bg-red-50 text-red-700',
+  'Family Law': 'bg-pink-50 text-pink-700',
+  'Corporate Law': 'bg-blue-50 text-blue-700',
+  'Real Estate Law': 'bg-emerald-50 text-emerald-700',
+  'Immigration Law': 'bg-orange-50 text-orange-700',
+  'Intellectual Property': 'bg-purple-50 text-purple-700',
+  'Labor Law': 'bg-amber-50 text-amber-700',
+  'Tax Law': 'bg-teal-50 text-teal-700',
+  'Civil Litigation': 'bg-slate-100 text-slate-700',
+  'General Practice': 'bg-indigo-50 text-indigo-700',
+}
+
+export default function LawyerCard({ lawyer, onSelect }) {
+  const [hovered, setHovered] = useState(false)
+  const lawyerName = lawyer.full_name || lawyer.name || 'Lawyer'
+  const initial = lawyerName.charAt(0).toUpperCase()
+  const colorClass = SPECIALTY_COLORS[lawyer.specialty] || 'bg-indigo-50 text-indigo-700'
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="card-hover p-6 flex flex-col gap-4 animate-fade-in"
+    >
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-navy-800 to-navy-700 flex items-center justify-center text-white font-bold text-xl shadow-sm flex-shrink-0">
+          {initial}
+        </div>
+        <div className="flex-1 min-w-0">
+          <h3 className="font-semibold text-slate-900 truncate">{lawyerName}</h3>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <span className="text-sm font-bold text-navy-800">{lawyer.consultation_price || '1200'} DA</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">/ RDV</span>
+          </div>
+          <span className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mt-2 ${colorClass}`}>
+            <Briefcase size={10} />
+            {lawyer.specialty}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 text-amber-400">
+          <Star size={12} fill="currentColor" />
+          <span className="text-xs font-medium text-slate-600">4.9</span>
+        </div>
+      </div>
+
+      {/* Info Section */}
+      <div className="space-y-2 border-t border-slate-50 pt-4">
+        <div className="flex items-center gap-2 text-xs text-slate-600">
+          <MapPin size={14} className="text-navy-800" />
+          <span className="truncate">{lawyer.office_location || 'Alger, Centre'}</span>
+        </div>
+        <div className="flex items-center gap-2 text-xs text-slate-600">
+          <Phone size={14} className="text-navy-800" />
+          <span>{lawyer.phone_number || '0555-XXX-XXX'}</span>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-slate-50 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-navy-800">{lawyer.experience_years || '5'}+</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Expérience</p>
+        </div>
+        <div className="bg-slate-50 rounded-xl p-3 text-center">
+          <p className="text-lg font-bold text-navy-800">95%</p>
+          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">Succès</p>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <button
+        onClick={() => onSelect(lawyer)}
+        className="w-full flex items-center justify-center gap-2 bg-navy-800 text-white py-2.5 rounded-xl text-sm font-semibold
+                   hover:bg-navy-700 active:scale-[0.98] transition-all duration-150 shadow-sm group"
+      >
+        Request Consultation
+        <ArrowRight size={15} className={`transition-transform duration-200 ${hovered ? 'translate-x-1' : ''}`} />
+      </button>
+    </div>
+  )
+}
